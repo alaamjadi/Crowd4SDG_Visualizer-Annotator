@@ -1,0 +1,39 @@
+/* Body */
+body {
+  margin: 0;
+  background-color: gray;
+  font-family: courier;
+  font-size: large;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Main */
+canvas {
+    display: block;
+    background-color: #f7f7f7;
+    width: 100%;
+    height: 100%;
+  }
+
+a{
+  color: white;
+}
+a:hover{
+  color: yellow;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  background-color: #484848;
+  font-size: 16px;
+  text-align: center;
+  padding-top: 6px;
+  padding-bottom: 0px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  color: white;
+}

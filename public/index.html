@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Filtering</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="csvToArray.v2.1.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+</head>
+<body>
+
+    <script>
+
+        var array = [];
+
+
+        function check_box(cb) {
+            tweet_id = cb.id;
+            $(tweet_id).trigger('change');
+        }
+
+
+        function handleClick(tweet_id) {
+            array.push(tweet_id);
+        }
+
+        function buttonClick(){
+
+            var csv = 'tweet_id\n';
+            for(var i = 0; i < array.length; i++) /*csvAsArray.length*/
+            {
+                csv += array[i] + '\n';
+            }
+
+            var filename = 'false_positives.csv';
+
+            if (!csv.match(/^data:text\/csv/i)) {
+                csv = 'data:text/csv;charset=utf-8,' + csv;
+            }
+
+            var data = encodeURI(csv);
+
+            var link = document.createElement('a');
+            link.setAttribute('href', data);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+
+        $(document).ready(function(){
+
+            $.ajax({
+                url: "no_people.csv",
+                dataType: 'text',
+                cache: false
+            }).done(function(csvAsString){
+                csvAsArray=csvAsString.csvToArray();
+                for(var j = 0; j < csvAsArray.length - 1; j += 4)
+                {
+                    if(j > 0) {
+                        var multi = document.createElement('div');
+                        multi.className = 'multipl-image-checkbox';
+                        multi.style.display = 'inline-block';
+
+                        for(var i = 0; i < 4; i++) /*csvAsArray.length*/
+                        {
+                            row = csvAsArray[j+i] + '';
+                            split = row.split(',');
+                            tweet_id = split[0];
+                            url = split[1];
+                            tag = split[2];
+
+
+                            var ul = document.createElement('ul');
+
+                            var li = document.createElement('li');
+                            li.style.display = 'inline-block';
+                            var checkbox = document.createElement('input');
+                            checkbox.setAttribute('type', 'checkbox');
+                            checkbox.setAttribute('onclick', 'handleClick('+tweet_id+')');
+                            checkbox.id = tweet_id;
+
+
+                            var label = document.createElement('label');
+                            label.setAttribute('for', 'check');
+                            label.innerText = tag;
+                            label.style.textAlign = 'center';
+
+
+                            var img = document.createElement('img');
+                            img.setAttribute('src', url);
+                            img.setAttribute('width', "160px");
+                            img.setAttribute('height', "160px");
+                            img.setAttribute('title', tweet_id);
+                            img.setAttribute('onclick','check_box(tweet_id)');
+
+
+                            label.appendChild(img);
+                            li.appendChild(checkbox);
+                            li.appendChild(label);
+                            ul.appendChild(li);
+                            multi.appendChild(ul);
+
+                        }
+                        document.body.appendChild(multi);
+                    }
+
+                }
+                var button = document.createElement("BUTTON");
+                var t = document.createTextNode("Submit answers");
+                button.appendChild(t);
+                button.setAttribute('onclick','buttonClick()');
+                document.body.appendChild(button);
+
+
+            });
+
+        });
+
+    </script>
+
+
+
+</body>
+</html>
