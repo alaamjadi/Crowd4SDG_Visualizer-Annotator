@@ -3,6 +3,8 @@ var fs = require("fs")
 var http = require('http')
 var serveStatic = require('serve-static')
 var finalhandler = require('finalhandler')
+var sanitize = require("sanitize-filename");
+
 
 // Serve port
 var serverPort = process.env.PORT || 3000;

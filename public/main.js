@@ -1,11 +1,19 @@
-
 var options = ""
+var question = ""
 var myDataObject = {}
+let file
 
 /* Copyright 2012-2013 Daniel Tillin
  * csvToArray v2.1 (Unminifiled for development)
  * http://code.google.com/p/csv-to-array/
  */
+function sanitize(input) {
+    var illegalRe = /[\/\?<>\\:\*\|":]/g;
+    var controlRe = /[\x00-\x1f\x80-\x9f]/g;
+    var reservedRe = /^\.+$/;
+    var windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
+    return input.replace(illegalRe, '').replace(controlRe, '').replace(reservedRe, '').replace(windowsReservedRe, '')
+  }
 
 String.prototype.csvToArray = function (o) {
     var od = {
@@ -83,20 +91,34 @@ function deletChild(id_element) {
 
 function handleClick(tweet_id, options_tag) {
     for (let index = 0; index < options.length; index++) {
-        $("#btn"+tweet_id+options[index]).removeClass('active')
+        $("#btn" + tweet_id + options[index]).removeClass('active')
     }
     $("#btn" + tweet_id + options_tag).toggleClass("active")
     myDataObject[tweet_id] = options_tag
 }
 
-function submit_all() {
-    console.log(myDataObject)
+function drawImageBoxWithOptions(tweet_id, url) {
+    myDataObject[tweet_id] = "NotClicked"
+    document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
+
+    for (let index = 0; index < options.length; index++) {
+        document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn${tweet_id}${options[index]}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+    }
+}
+
+function checkImage(tweet_id, url) {
+    $.get(url)
+        .done(function () {
+            drawImageBoxWithOptions(tweet_id, url)
+        }).fail(function () {
+            myDataObject[tweet_id] = "ImageNotFound"
+        })
 }
 
 $('#submit-btn').click(function () {
     myDataObject = {}
     deletChild('twitter-images')
-    var question = $('#question-text').val()
+    question = $('#question-text').val()
     options = $('#answer-text').val().split(';')
     if (question.length && options.length != 0) {
         $('#question-position').text(question)
@@ -106,12 +128,29 @@ $('#submit-btn').click(function () {
     }
 })
 
+function submit_all() {
+    var csv = 'tweet_id,options_chosen\n';
+    for (const [key, value] of Object.entries(myDataObject)) {
+        csv += `${key}` + ',' + `${value}` + '\n';
+    }
+    var filename = sanitize(question) + ' - ' + file.name;
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    var data = encodeURI(csv);
+    var link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 $('#file-upload').change(function () {
     deletChild('twitter-images')
     let i = $(this).prev('label').clone();
-    let file = $('#file-upload')[0].files[0];
+    file = $('#file-upload')[0].files[0];
     $(this).prev('label').text(file.name);
-    //console.log(options)
     if (file) {
         // new FileReader object
         let reader = new FileReader();
@@ -133,15 +172,8 @@ $('#file-upload').change(function () {
                         split = row.split(',');
                         tweet_id = split[0];
                         url = split[1];
-                        tag = split[2];
-
-                        myDataObject[tweet_id] = "NotClicked"
-
-                        document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="001" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td>Tag: ${tag}</td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
-
-                        for (let index = 0; index < options.length; index++) {
-                            document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn${tweet_id}${options[index]}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="button center mr-2 mb-2">${options[index]}</button>`
-                        }
+                        //tag = split[2];
+                        checkImage(tweet_id, url)
                     }
                 }
             }
