@@ -155,11 +155,13 @@ function submit_all() {
 }
 
 $('#file-upload').change(function () {
+    
     deletChild('twitter-images')
     let i = $(this).prev('label').clone();
     file = $('#file-upload')[0].files[0];
     $(this).prev('label').text(file.name);
     if (file) {
+        
         // new FileReader object
         let reader = new FileReader();
 
@@ -168,22 +170,12 @@ $('#file-upload').change(function () {
             // contents of the file
             let text = e.target.result;
             csvAsArray = text.csvToArray();
-            // 
-            for (var j = 0; j < csvAsArray.length - 1; j += 4) {
-                if (j > 0) {
-                    var multi = document.createElement('div');
-                    multi.className = 'multipl-image-checkbox';
-                    multi.style.display = 'inline-block';
-                    //
-                    for (var i = 0; i < 4; i++) /*csvAsArray.length*/ {
+            for (var j = 1; j < csvAsArray.length; j += 1) {
                         row = csvAsArray[j + i] + '';
                         split = row.split(',');
-                        tweet_id = split[0];
-                        url = split[1];
-                        //tag = split[2];
+                        tweet_id = csvAsArray[j][0];
+                        url = csvAsArray[j][3];
                         checkImage(tweet_id, url)
-                    }
-                }
             }
         });
 
@@ -200,5 +192,4 @@ $('#file-upload').change(function () {
             document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index]}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
         }
     }
-    console.log(myDataObject)
 });
