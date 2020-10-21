@@ -50,7 +50,10 @@
               </form>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-toggle="modal" data-target="#submit" onclick="submit_all()">Submit</a>
+              <a class="nav-link" data-toggle="modal" data-target="#checkModal">Check All</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="submit_all()">Submit</a>
             </li>
           </ul>
         </div>
@@ -58,7 +61,7 @@
     </nav>
   </header>
 
-  <!-- Modal -->
+  <!-- Question and Answer Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -87,6 +90,23 @@
         <div class="modal-footer">
           <button id="submit-btn" type="submit" class="btn btn-primary">OK</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Choose Button Modal -->
+    <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="checkModalLabel">Please choose the select all button</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="modalButtons" class="modal-footer d-flex justify-content-center text-center">
         </div>
       </div>
     </div>

@@ -91,10 +91,18 @@ function deletChild(id_element) {
 
 function handleClick(tweet_id, options_tag) {
     for (let index = 0; index < options.length; index++) {
-        $("#btn" + tweet_id + options[index]).removeClass('active')
+        $("#btn-" + tweet_id + "-" + options[index]).removeClass('active')
     }
-    $("#btn" + tweet_id + options_tag).toggleClass("active")
+    $("#btn-" + tweet_id + "-" + options_tag).toggleClass("active")
     myDataObject[tweet_id] = options_tag
+}
+
+function selectAllButtons(btnID) {
+    let all_the_buttons = document.getElementsByClassName(`btn-Group-${btnID}`)
+    for (var i = 0, n = all_the_buttons.length; i < n; ++i) {
+        handleClick(all_the_buttons[i].id.split('-')[1],all_the_buttons[i].id.split('-')[2])
+    }
+    $('#checkModal').modal('hide')
 }
 
 function drawImageBoxWithOptions(tweet_id, url) {
@@ -102,7 +110,7 @@ function drawImageBoxWithOptions(tweet_id, url) {
     document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
 
     for (let index = 0; index < options.length; index++) {
-        document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn${tweet_id}${options[index]}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+        document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index]}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index]} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
 }
 
@@ -160,13 +168,13 @@ $('#file-upload').change(function () {
             // contents of the file
             let text = e.target.result;
             csvAsArray = text.csvToArray();
-
+            // 
             for (var j = 0; j < csvAsArray.length - 1; j += 4) {
                 if (j > 0) {
                     var multi = document.createElement('div');
                     multi.className = 'multipl-image-checkbox';
                     multi.style.display = 'inline-block';
-
+                    //
                     for (var i = 0; i < 4; i++) /*csvAsArray.length*/ {
                         row = csvAsArray[j + i] + '';
                         split = row.split(',');
@@ -186,5 +194,11 @@ $('#file-upload').change(function () {
 
         // read file as text file
         reader.readAsText(file);
+
+        // "Check All" menu item
+        for (let index = 0; index < options.length; index++) {
+            document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index]}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+        }
     }
+    console.log(myDataObject)
 });
