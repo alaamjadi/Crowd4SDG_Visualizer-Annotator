@@ -1,5 +1,4 @@
 /* Modules  */
-var fs = require("fs")
 var http = require('http')
 var serveStatic = require('serve-static')
 var finalhandler = require('finalhandler')

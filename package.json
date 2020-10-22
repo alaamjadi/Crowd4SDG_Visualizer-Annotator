@@ -1,7 +1,7 @@
 {
-    "name": "scatter-plot-visualization",
+    "name": "social-distancing",
     "version": "1.0.0",
-    "description": "Scatter plot visualization using WebGL, a project for computer graphics course which was developed by SophisticatedKids at Politecnico di Milano",
+    "description": "Social Distancing Project at Politecnico di Milano",
     "main": "index.js",
     "scripts": {
         "prestart": "npm install",
@@ -13,7 +13,6 @@
         "Nodejs",
         "Bootstrap",
         "JQuery",
-        "WebGL",
         "NPM"
     ],
     "author": "SophisticatedKids",
@@ -21,10 +20,7 @@
     "private": true,
     "dependencies": {
         "finalhandler": "1.1.2",
-        "fs": "0.0.1-security",
         "http": "0.0.1-security",
-        "sanitize-filename": "1.6.3",
-        "scandir": "0.1.2",
         "serve-static": "1.14.1"
     },
     "devDependencies": {}
