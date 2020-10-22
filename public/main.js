@@ -7,7 +7,8 @@ let file
  * csvToArray v2.1 (Unminifiled for development)
  * http://code.google.com/p/csv-to-array/
  */
-function sanitize(input) {
+
+ function sanitize(input) {
     var illegalRe = /[\/\?<>\\:\*\|":]/g;
     var controlRe = /[\x00-\x1f\x80-\x9f]/g;
     var reservedRe = /^\.+$/;
@@ -108,7 +109,6 @@ function selectAllButtons(btnID) {
 function drawImageBoxWithOptions(tweet_id, url) {
     myDataObject[tweet_id] = "NotClicked"
     document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
-
     for (let index = 0; index < options.length; index++) {
         document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index]}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index]} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
@@ -134,6 +134,10 @@ $('#submit-btn').click(function () {
     } else {
         alert('Either Question or Answer field is empty!')
     }
+    deletChild('modalButtons')
+    for (let index = 0; index < options.length; index++) {
+        document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index]}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+    }
 })
 
 function submit_all() {
@@ -155,19 +159,13 @@ function submit_all() {
 }
 
 $('#file-upload').change(function () {
-    
     deletChild('twitter-images')
     let i = $(this).prev('label').clone();
     file = $('#file-upload')[0].files[0];
     $(this).prev('label').text(file.name);
-    if (file) {
-        
-        // new FileReader object
+    if (file) {        
         let reader = new FileReader();
-
-        // event fired when file reading finished
         reader.addEventListener('load', function (e) {
-            // contents of the file
             let text = e.target.result;
             csvAsArray = text.csvToArray();
             for (var j = 1; j < csvAsArray.length; j += 1) {
@@ -178,18 +176,10 @@ $('#file-upload').change(function () {
                         checkImage(tweet_id, url)
             }
         });
-
-        // event fired when file reading failed
         reader.addEventListener('error', function () {
             alert('Error : Failed to read file');
         });
-
-        // read file as text file
         reader.readAsText(file);
-
-        // "Check All" menu item
-        for (let index = 0; index < options.length; index++) {
-            document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index]}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
-        }
     }
+    // myDataObject = {}
 });

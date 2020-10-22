@@ -1,7 +1,9 @@
 # Social Distancing Project
-A project for Crowd4SDG project which was developed by SophisticatedKids at Politecnico di Milano
+A project for Crowd4SDG project which was developed by SK at Politecnico di Milano
 
 ### Opening the app
+[Local server](http://localhost:3000)
+
 [Deployment on Heroku](https://social-distancing-project.herokuapp.com)
 
 ### Installing the dependencies
@@ -48,11 +50,5 @@ open http://localhost:3000
 - If the buttons are not working, a picture is not loaded completely or you can see the buttons but the pictures aren't there, it means the loading part is not finished yet. Please be patient for a couple of seconds.
 - This app has been tested for input CSV files with 500 entries and in total with accumulated 3500 entries without facing any crashes. The browser consumed 1-3GB of RAM.
 
-
 ### License
 This resource can be used freely if integrated or build upon in personal projects such as websites, web apps, and web templates intended for personal or academic purposes only. It is not allowed to take the resource "as-is" and sell it, redistribute, re-publish it, or sell "plagiarized" versions of it. Any built using this resource should have a visible mention and link to the original work. Always consider the licenses of all included libraries, scripts, and images used.
-
-### Misc
-Follow Mohammad: [LinkedIn](https://www.linkedin.com/in/alaamjadi/), [Twitter](https://twitter.com/AlaAmjadi)
-
-[© SophisticatedKids 2020](https://mil-care.herokuapp.com/backend/)
