@@ -172,7 +172,12 @@ $('#file-upload').change(function () {
                         row = csvAsArray[j + i] + '';
                         split = row.split(',');
                         tweet_id = csvAsArray[j][0];
-                        url = csvAsArray[j][3];
+                        url_raw = csvAsArray[j][3];
+                        if (url_raw.split(':')[0] == "http") {
+                            url = url_raw.replace(':', 's:')
+                        } else {
+                            url = url_raw
+                        }
                         checkImage(tweet_id, url)
             }
         });
