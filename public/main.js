@@ -3,19 +3,18 @@ var question = ""
 var myDataObject = {}
 let file
 
-/* Copyright 2012-2013 Daniel Tillin
- * csvToArray v2.1 (Unminifiled for development)
- * http://code.google.com/p/csv-to-array/
- */
-
- function sanitize(input) {
+function sanitize(input) {
     var illegalRe = /[\/\?<>\\:\*\|":]/g;
     var controlRe = /[\x00-\x1f\x80-\x9f]/g;
     var reservedRe = /^\.+$/;
     var windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
     return input.replace(illegalRe, '').replace(controlRe, '').replace(reservedRe, '').replace(windowsReservedRe, '')
-  }
+}
 
+/* Copyright 2012-2013 Daniel Tillin
+ * csvToArray v2.1 (Unminifiled for development)
+ * http://code.google.com/p/csv-to-array/
+*/
 String.prototype.csvToArray = function (o) {
     var od = {
         'fSep': ',',
@@ -92,14 +91,14 @@ function deletChild(id_element) {
 
 function handleClick(tweet_id, options_tag) {
     for (let index = 0; index < options.length; index++) {
-        $("#btn-" + tweet_id + "-" + options[index]).removeClass('active')
+        $("#btn-" + tweet_id + "-" + options[index].replace(/\s+/g, "")).removeClass('active')
     }
-    $("#btn-" + tweet_id + "-" + options_tag).toggleClass("active")
+    $("#btn-" + tweet_id + "-" + options_tag.replace(/\s+/g, "")).toggleClass("active")
     myDataObject[tweet_id] = options_tag
 }
 
 function selectAllButtons(btnID) {
-    let all_the_buttons = document.getElementsByClassName(`btn-Group-${btnID}`)
+    let all_the_buttons = document.getElementsByClassName(`btn-Group-${btnID.replace(/\s+/g, "")}`)
     for (var i = 0, n = all_the_buttons.length; i < n; ++i) {
         handleClick(all_the_buttons[i].id.split('-')[1],all_the_buttons[i].id.split('-')[2])
     }
@@ -107,10 +106,10 @@ function selectAllButtons(btnID) {
 }
 
 function drawImageBoxWithOptions(tweet_id, url) {
-    myDataObject[tweet_id] = "NotClicked"
+    myDataObject[tweet_id] = "Not Clicked"
     document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
     for (let index = 0; index < options.length; index++) {
-        document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index]}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index]} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+        document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index].replace(/\s+/g, "")}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index].replace(/\s+/g, "")} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
 }
 
@@ -128,6 +127,7 @@ $('#submit-btn').click(function () {
     deletChild('twitter-images')
     question = $('#question-text').val()
     options = $('#answer-text').val().split(';')
+    console.log({question, options})
     if (question.length && options.length != 0) {
         $('#question-position').text(question)
         $('#exampleModal').modal('hide')
@@ -136,7 +136,7 @@ $('#submit-btn').click(function () {
     }
     deletChild('modalButtons')
     for (let index = 0; index < options.length; index++) {
-        document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index]}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+        document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index].replace(/\s+/g, "")}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
 })
 
