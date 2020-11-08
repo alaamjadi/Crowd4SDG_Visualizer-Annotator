@@ -100,7 +100,7 @@ body .dg.main .close-button:hover {
 	}
 	.frame__title {
 		margin: 0;
-    grid-area: title;
+		grid-area: title;
 	}
 	.frame__links {
 		grid-area: links;

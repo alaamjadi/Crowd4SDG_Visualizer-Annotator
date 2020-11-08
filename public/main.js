@@ -3,7 +3,7 @@ var question = ""
 var myDataObject = {}
 let file
 let csvAsArray
-let splitStep = 10
+let splitStep = 100
 
 function sanitize(input) {
     var illegalRe = /[\/\?<>\\:\*\|":]/g;
@@ -102,20 +102,17 @@ function handleClick(tweet_id, options_tag) {
 function selectAllButtons(btnID) {
     let all_the_buttons = document.getElementsByClassName(`btn-Group-${btnID.replace(/\s+/g, "")}`)
     for (var i = 0, n = all_the_buttons.length; i < n; ++i) {
-        handleClick(all_the_buttons[i].id.split('-')[1], all_the_buttons[i].id.split('-')[2])
+        handleClick(all_the_buttons[i].id.split('-')[1], btnID)
     }
     $('#checkModal').modal('hide')
 }
 
 function drawImageBoxWithOptions(tweet_id, url) {
-    //myDataObject[tweet_id] = "Not Clicked"
     document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
     for (let index = 0; index < options.length; index++) {
         document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index].replace(/\s+/g, "")}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index].replace(/\s+/g, "")} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
-    if (typeof  myDataObject[tweet_id] == 'undefined') {
-        myDataObject[tweet_id] = "Not Clicked"
-    } else {
+    if (myDataObject[tweet_id] !== 'Did Not Load The Page' || 'Not Clicked' || 'Image Not Found') {
         $("#btn-" + tweet_id + "-" + myDataObject[tweet_id].replace(/\s+/g, "")).toggleClass("active")
     }
 }
@@ -127,6 +124,16 @@ function checkImage(tweet_id, url) {
         }).fail(function () {
             myDataObject[tweet_id] = "Image Not Found"
         })
+}
+
+function arrayInitial() {
+    csvAsArray.forEach(element => {
+        if (element[0] == "id") {
+            return
+        } else {
+            myDataObject[element[0]] = "Did Not Load The Page"
+        }
+    });
 }
 
 function loadPage(pageNumber) {
@@ -163,6 +170,7 @@ function loadPageButtons() {
 }
 
 function pagination(pageNumber) {
+    window.stop()
     deletChild('twitter-images')
     for (let index = 1; index <= Math.ceil(csvAsArray.length / splitStep); index++) {
         $("#Page" + index).removeClass('active')
@@ -217,6 +225,7 @@ $('#file-upload').change(function () {
             let text = e.target.result;
             csvAsArray = text.csvToArray();
             loadPageButtons()
+            arrayInitial()
             loadPage(1)
             $("#Page1").toggleClass("active")
         });
