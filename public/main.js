@@ -108,10 +108,15 @@ function selectAllButtons(btnID) {
 }
 
 function drawImageBoxWithOptions(tweet_id, url) {
-    myDataObject[tweet_id] = "Not Clicked"
+    //myDataObject[tweet_id] = "Not Clicked"
     document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
     for (let index = 0; index < options.length; index++) {
         document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index].replace(/\s+/g, "")}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index].replace(/\s+/g, "")} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+    }
+    if (typeof  myDataObject[tweet_id] == 'undefined') {
+        myDataObject[tweet_id] = "Not Clicked"
+    } else {
+        $("#btn-" + tweet_id + "-" + myDataObject[tweet_id].replace(/\s+/g, "")).toggleClass("active")
     }
 }
 
@@ -163,7 +168,6 @@ function pagination(pageNumber) {
         $("#Page" + index).removeClass('active')
     }
     $("#Page" + pageNumber).toggleClass("active")
-    //loadPage(2)
     loadPage(pageNumber)
 }
 
@@ -214,6 +218,7 @@ $('#file-upload').change(function () {
             csvAsArray = text.csvToArray();
             loadPageButtons()
             loadPage(1)
+            $("#Page1").toggleClass("active")
         });
         reader.addEventListener('error', function () {
             alert('Error : Failed to read file');
