@@ -2,6 +2,8 @@ var options = ""
 var question = ""
 var myDataObject = {}
 let file
+let csvAsArray
+let splitStep = 10
 
 function sanitize(input) {
     var illegalRe = /[\/\?<>\\:\*\|":]/g;
@@ -100,7 +102,7 @@ function handleClick(tweet_id, options_tag) {
 function selectAllButtons(btnID) {
     let all_the_buttons = document.getElementsByClassName(`btn-Group-${btnID.replace(/\s+/g, "")}`)
     for (var i = 0, n = all_the_buttons.length; i < n; ++i) {
-        handleClick(all_the_buttons[i].id.split('-')[1],all_the_buttons[i].id.split('-')[2])
+        handleClick(all_the_buttons[i].id.split('-')[1], all_the_buttons[i].id.split('-')[2])
     }
     $('#checkModal').modal('hide')
 }
@@ -118,27 +120,52 @@ function checkImage(tweet_id, url) {
         .done(function () {
             drawImageBoxWithOptions(tweet_id, url)
         }).fail(function () {
-            myDataObject[tweet_id] = "ImageNotFound"
+            myDataObject[tweet_id] = "Image Not Found"
         })
 }
 
-$('#submit-btn').click(function () {
-    myDataObject = {}
+function loadPage(pageNumber) {
+    if (Math.ceil(csvAsArray.length / splitStep) == pageNumber) {
+        for (var j = splitStep * (pageNumber - 1) + 1; j < csvAsArray.length; j++) {
+            tweet_id = csvAsArray[j][0];
+            url_raw = csvAsArray[j][3];
+            if (url_raw.split(':')[0] == "http") {
+                url = url_raw.replace(':', 's:')
+            } else {
+                url = url_raw
+            }
+            checkImage(tweet_id, url)
+        }
+    } else if (Math.ceil(csvAsArray.length / splitStep) > pageNumber) {
+        for (var j = splitStep * (pageNumber - 1) + 1; j < splitStep * pageNumber + 1; j++) {
+            tweet_id = csvAsArray[j][0];
+            url_raw = csvAsArray[j][3];
+            if (url_raw.split(':')[0] == "http") {
+                url = url_raw.replace(':', 's:')
+            } else {
+                url = url_raw
+            }
+            checkImage(tweet_id, url)
+        }
+    }
+}
+
+function loadPageButtons() {
+    deletChild('PainationButtons')
+    for (let index = 1; index <= Math.ceil(csvAsArray.length / splitStep); index++) {
+        document.getElementById('PainationButtons').innerHTML += `<button class="shadow rounded-lg button center mr-2 mb-2 cus_pagination" id="Page${index}" onclick="pagination(${index})">${index}</button>`
+    }
+}
+
+function pagination(pageNumber) {
     deletChild('twitter-images')
-    question = $('#question-text').val()
-    options = $('#answer-text').val().split(';')
-    console.log({question, options})
-    if (question.length && options.length != 0) {
-        $('#question-position').text(question)
-        $('#exampleModal').modal('hide')
-    } else {
-        alert('Either Question or Answer field is empty!')
+    for (let index = 1; index <= Math.ceil(csvAsArray.length / splitStep); index++) {
+        $("#Page" + index).removeClass('active')
     }
-    deletChild('modalButtons')
-    for (let index = 0; index < options.length; index++) {
-        document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index].replace(/\s+/g, "")}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
-    }
-})
+    $("#Page" + pageNumber).toggleClass("active")
+    //loadPage(2)
+    loadPage(pageNumber)
+}
 
 function submit_all() {
     var csv = 'tweet_id,options_chosen\n';
@@ -158,33 +185,39 @@ function submit_all() {
     document.body.removeChild(link);
 }
 
+$('#submit-btn').click(function () {
+    myDataObject = {}
+    deletChild('twitter-images')
+    question = $('#question-text').val()
+    options = $('#answer-text').val().split(';')
+    if (question.length && options.length != 0) {
+        $('#question-position').text(question)
+        $('#exampleModal').modal('hide')
+    } else {
+        alert('Either Question or Answer field is empty!')
+    }
+    deletChild('modalButtons')
+    for (let index = 0; index < options.length; index++) {
+        document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index].replace(/\s+/g, "")}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+    }
+})
+
 $('#file-upload').change(function () {
     deletChild('twitter-images')
     let i = $(this).prev('label').clone();
     file = $('#file-upload')[0].files[0];
     $(this).prev('label').text(file.name);
-    if (file) {        
+    if (file) {
         let reader = new FileReader();
         reader.addEventListener('load', function (e) {
             let text = e.target.result;
             csvAsArray = text.csvToArray();
-            for (var j = 1; j < csvAsArray.length; j += 1) {
-                        row = csvAsArray[j + i] + '';
-                        split = row.split(',');
-                        tweet_id = csvAsArray[j][0];
-                        url_raw = csvAsArray[j][3];
-                        if (url_raw.split(':')[0] == "http") {
-                            url = url_raw.replace(':', 's:')
-                        } else {
-                            url = url_raw
-                        }
-                        checkImage(tweet_id, url)
-            }
+            loadPageButtons()
+            loadPage(1)
         });
         reader.addEventListener('error', function () {
             alert('Error : Failed to read file');
         });
         reader.readAsText(file);
     }
-    // myDataObject = {}
 });

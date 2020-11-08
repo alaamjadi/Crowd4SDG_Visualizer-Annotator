@@ -17,7 +17,7 @@ var server = http.createServer(function onRequest (req, res) {
 // Start the server
 server.listen(serverPort)
 console.log(
-    "Your server is running on port %d (http://localhost:%d)",
-    serverPort,
-    serverPort
+  "Your server is running on port %d (http://localhost:%d)",
+  serverPort,
+  serverPort
   );
