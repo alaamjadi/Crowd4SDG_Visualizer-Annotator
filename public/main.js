@@ -179,27 +179,10 @@ function pagination(pageNumber) {
     loadPage(pageNumber)
 }
 
-function submit_all() {
-    var csv = 'tweet_id,options_chosen\n';
-    for (const [key, value] of Object.entries(myDataObject)) {
-        csv += `${key}` + ',' + `${value}` + '\n';
-    }
-    var filename = sanitize(question) + ' - ' + file.name;
-    if (!csv.match(/^data:text\/csv/i)) {
-        csv = 'data:text/csv;charset=utf-8,' + csv;
-    }
-    var data = encodeURI(csv);
-    var link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
 $('#submit-btn').click(function () {
     myDataObject = {}
     deletChild('twitter-images')
+    deletChild('PainationButtons')
     question = $('#question-text').val()
     options = $('#answer-text').val().split(';')
     if (question.length && options.length != 0) {
@@ -235,3 +218,21 @@ $('#file-upload').change(function () {
         reader.readAsText(file);
     }
 });
+
+function submit_all() {
+    var csv = 'tweet_id,options_chosen\n';
+    for (const [key, value] of Object.entries(myDataObject)) {
+        csv += `${key}` + ',' + `${value}` + '\n';
+    }
+    var filename = sanitize(question) + ' - ' + file.name;
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    var data = encodeURI(csv);
+    var link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
