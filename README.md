@@ -1,52 +1,58 @@
 # Social Distancing Project
-A project for Crowd4SDG project which was developed by SophisticatedKids at Politecnico di Milano
+A project for Crowd4SDG project which was developed by SK at Politecnico di Milano
 
-### Opening the app
-[Deployment on Heroku](https://social-distancing-project.herokuapp.com)
+## Instructions
 
-### Installing the dependencies
-```
-npm install
-```
+### Installing, Running, and using
 
-### Running the server
-To run the server, run:
-```
-npm start
-```
+You can whether use this application locally or on the cloud.
 
-or
-```
-node index.js
-```
+#### Installing the server
 
-To view the program:
-```
-open http://localhost:3000
-```
+You need a local HTTP server to serve the public folder (index.hml). This can be done using Node, Python, XAMP, WAMP, and any other server.
+- Node: [Download](https://nodejs.org/en/download/), for MacOS instructions [click here](https://treehouse.github.io/installation-guides/mac/node-mac.html)
 
-### Instructions (How to use the Application)
-1) Click on New Question
+    Run the following command inside the application folder where index.js exists:
+    ```
+    npm install
+    ```
+- Python: [Download](https://www.python.org/downloads/)
 
-2) Insert the question and possible answers (use a semicolon to separate answers.Don't use special characters in the answers.)
+#### Running the application
 
-3) Click on the OK button. If you use this in the middle of your procedure it will reset the whole process (Everything will be cleaned).
+Running the application on Heroku Cloud: [Click here](https://social-distancing-project.herokuapp.com/)
 
-4) Load the input CSV file which contains the Twitter ID and the Image URL.
+Running the application locally:
 
-5) If you need to select an answer for all the pictures with one click, just use the "Check All" button. This option is disabled before inserting answers.
+- Node:
 
-6) When you are done with all the sets of input CSV files, the result output CSV file can be download by pressing the submit button.
+    Run the following command inside the application folder where index.js exists:
+    ```
+    node index.js
+    ```
+- Python:
+    ```
+    python -m http.server 8000 --bind 127.0.0.1
+    ```
 
-### Notes
-- If a picture does not exist, it will be added to the output CSV file with "Image Not Found" as an answer.
+#### Using the application
+
+1) From the right side menu, choose the "New Question" item. Insert the question and possible answers (use a semicolon to separate answers. Don't use special characters in the answers but space can be used). Click on the OK button to submit the question and possible answers. Submitting this at any stage will reset the app (same as refreshing the page) and everything will be cleared.
+
+2) Load the input CSV file which contains the Twitter ID and the Image URL.
+
+3) Select the proper answers for each picture. By navigating between different pages your progress will not get cleared.
+
+4) When you are done with all the pictures for one CSV file, you can download the results output CSV file by clicking on the submit button.
+
+5) You can repeat steps two to four for each input CSV file for the same question.
+
+#### General Notes
+- If a picture does not exist, the Twitter ID will be added to the output CSV file with "Image Not Found" as an answer.
+- If you don't choose any of the options for an image, the Twitter ID will be added to the output CSV file with "Did not choose an option" as an answer.
+- The output CSV file name would be "QUESTION - INPUT_CSV_FILENAME.csv".
 - The loading of images for each page might take 2-5 seconds to load, please be patient.
-- This app has been tested for a CSV files with 10K entries without any problem.
+- This app has been tested for CSV files with 10K entries without any problem. Please report any possible bugs and issues you may face.
 
-### License
+## License
 This resource can be used freely if integrated or build upon in personal projects such as websites, web apps, and web templates intended for personal or academic purposes only. It is not allowed to take the resource "as-is" and sell it, redistribute, re-publish it, or sell "plagiarized" versions of it. Any built using this resource should have a visible mention and link to the original work. Always consider the licenses of all included libraries, scripts, and images used.
-
-### Misc
-Follow Mohammad: [LinkedIn](https://www.linkedin.com/in/alaamjadi/), [Twitter](https://twitter.com/AlaAmjadi)
-
-[© SophisticatedKids 2020](https://mil-care.herokuapp.com/backend/)
