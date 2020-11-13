@@ -34,6 +34,8 @@
         <!-- <button class="rounded mr-1">&#8249;</button>
         <button class="rounded mr-5">&#8250;</button> -->
 
+        <a class="nav-link nav-item text-center text-dark" href="./instruction" target="_blank">Instructions</a>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -56,9 +58,6 @@
             </li>
             <li class="nav-item">
               <a class="nav-link text-center" onclick="submit_all()">Submit</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-center" href="./instruction" target="_blank">Instructions</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-center" href="./doc" target="_blank">Documentation</a>
@@ -91,13 +90,13 @@
               <input type="text" class="form-control" id="answer-text">
               <label class="col-form-label"><br><span class="text-warning">Note: </span>seperate answers with semicolon</label>
               <label class="col-form-label"><span class="text-warning">Note: </span>After submitting the question, load the CSV file!</label>
-              <label class="col-form-label"><span class="text-warning">Note: </span>Clicking on OK button will reset the whole process and all answers will be <span class="text-danger">deleted</span>!</label>
+              <label class="col-form-label"><span class="text-warning">Note: </span>Clicking on submit button will reset the whole process and all answers will be <span class="text-danger">deleted</span>!</label>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button id="submit-btn" type="submit" class="btn btn-primary">OK</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="submit-btn" type="submit" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
