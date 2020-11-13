@@ -5,7 +5,7 @@ A project for Crowd4SDG project which was developed by SK at Politecnico di Mila
 
 ### Installing, Running, and using
 
-You can wether use this application locally or on the cloud.
+You can whether use this application locally or on the cloud.
 
 #### Installing the server
 
