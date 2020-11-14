@@ -38,7 +38,7 @@ Running the application locally:
 #### Using the application
 ![Image01](./screenshots/01.JPG)
 
-1) From the right side menu, choose the "New Question" item. Insert the question and possible answers (use a semicolon to separate answers. Don't use special characters in the answers but space can be used). Click on the OK button to submit the question and possible answers. Submitting this at any stage will reset the app (same as refreshing the page) and everything will be cleared.
+1) From the right side menu, choose the "New Question" item. Insert the question and possible answers (use a semicolon to separate answers. Don't use special characters in the answers but space can be used). Click on the "Submit" button to submit the question and possible answers. Submitting this at any stage will reset the app (same as refreshing the page) and everything will be cleared.
 
 ![Image02](./screenshots/02.JPG)
 ![Image03](./screenshots/03.JPG)
