@@ -206,7 +206,13 @@ $('#file-upload').change(function () {
         let reader = new FileReader();
         reader.addEventListener('load', function (e) {
             let text = e.target.result;
+            text = text.replace(/↵/g, "/_")
+            console.log("Error: ")
+            console.log(text)
+            /* text = text.join("") */
             csvAsArray = text.csvToArray();
+            console.log("Error: ")
+            console.log(csvAsArray)
             loadPageButtons()
             arrayInitial()
             loadPage(1)
