@@ -1,3 +1,6 @@
+const csv = require('csv-parser');
+const fs = require('fs');
+const results = [];
 var options = ""
 var question = ""
 var myDataObject = {}
@@ -5,13 +8,6 @@ let file
 let csvAsArray
 let splitStep = 100
 
-function sanitize(input) {
-    var illegalRe = /[\/\?<>\\:\*\|":]/g;
-    var controlRe = /[\x00-\x1f\x80-\x9f]/g;
-    var reservedRe = /^\.+$/;
-    var windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
-    return input.replace(illegalRe, '').replace(controlRe, '').replace(reservedRe, '').replace(windowsReservedRe, '')
-}
 
 /* Copyright 2012-2013 Daniel Tillin
  * csvToArray v2.1 (Unminifiled for development)
@@ -20,7 +16,7 @@ function sanitize(input) {
 String.prototype.csvToArray = function (o) {
     var od = {
         'fSep': ',',
-        'rSep': '\r\n',
+        'rSep': '\n',
         'quot': '"',
         'head': false,
         'trim': false
@@ -80,6 +76,15 @@ String.prototype.csvToArray = function (o) {
         a.pop()
     }
     return a;
+}
+
+
+function sanitize(input) {
+    var illegalRe = /y[\/\?<>\\:\*\|":]/g;
+    var controlRe = /[\x00-\x1f\x80-\x9f]/g;
+    var reservedRe = /^\.+$/;
+    var windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
+    return input.replace(illegalRe, '').replace(controlRe, '').replace(reservedRe, '').replace(windowsReservedRe, '')
 }
 
 function deletChild(id_element) {
@@ -195,7 +200,7 @@ $('#submit-btn').click(function () {
     for (let index = 0; index < options.length; index++) {
         document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index].replace(/\s+/g, "")}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
-})
+}) 
 
 $('#file-upload').change(function () {
     deletChild('twitter-images')
@@ -206,13 +211,7 @@ $('#file-upload').change(function () {
         let reader = new FileReader();
         reader.addEventListener('load', function (e) {
             let text = e.target.result;
-            text = text.replace(/↵/g, "/_")
-            console.log("Error: ")
-            console.log(text)
-            /* text = text.join("") */
             csvAsArray = text.csvToArray();
-            console.log("Error: ")
-            console.log(csvAsArray)
             loadPageButtons()
             arrayInitial()
             loadPage(1)
