@@ -4,6 +4,7 @@ var myDataObject = {}
 let file
 let csvAsArray
 let splitStep = 100
+let tweetID_columnNumber, tweetURL_columnNumber
 
 function sanitize(input) {
     var illegalRe = /[\/\?<>\\:\*\|":]/g;
@@ -126,21 +127,21 @@ function checkImage(tweet_id, url) {
         })
 }
 
-function arrayInitial() {
+function arrayInitial(tweetID_columnNumber) {
     csvAsArray.forEach(element => {
-        if (element[0] == "id") {
+        if (element[tweetID_columnNumber-1] == "id") {
             return
         } else {
-            myDataObject[element[0]] = "Did Not Load The Page"
+            myDataObject[element[tweetID_columnNumber-1]] = "Did Not Load The Page"
         }
     });
 }
 
-function loadPage(pageNumber) {
+function loadPage(pageNumber, tweetID_columnNumber, tweetURL_columnNumber) {
     if (Math.ceil(csvAsArray.length / splitStep) == pageNumber) {
         for (var j = splitStep * (pageNumber - 1) + 1; j < csvAsArray.length; j++) {
-            tweet_id = csvAsArray[j][0];
-            url_raw = csvAsArray[j][3];
+            tweet_id = csvAsArray[j][tweetID_columnNumber-1];
+            url_raw = csvAsArray[j][tweetURL_columnNumber-1];
             if (url_raw.split(':')[0] == "http") {
                 url = url_raw.replace(':', 's:')
             } else {
@@ -150,8 +151,8 @@ function loadPage(pageNumber) {
         }
     } else if (Math.ceil(csvAsArray.length / splitStep) > pageNumber) {
         for (var j = splitStep * (pageNumber - 1) + 1; j < splitStep * pageNumber + 1; j++) {
-            tweet_id = csvAsArray[j][0];
-            url_raw = csvAsArray[j][3];
+            tweet_id = csvAsArray[j][tweetID_columnNumber-1];
+            url_raw = csvAsArray[j][tweetURL_columnNumber-1];
             if (url_raw.split(':')[0] == "http") {
                 url = url_raw.replace(':', 's:')
             } else {
@@ -163,9 +164,9 @@ function loadPage(pageNumber) {
 }
 
 function loadPageButtons() {
-    deletChild('PainationButtons')
+    deletChild('PaginationButtons')
     for (let index = 1; index <= Math.ceil(csvAsArray.length / splitStep); index++) {
-        document.getElementById('PainationButtons').innerHTML += `<button class="shadow rounded-lg button center mr-2 mb-2 cus_pagination" id="Page${index}" onclick="pagination(${index})">${index}</button>`
+        document.getElementById('PaginationButtons').innerHTML += `<button class="shadow rounded-lg button center mr-2 mb-2 cus_pagination" id="Page${index}" onclick="pagination(${index})">${index}</button>`
     }
 }
 
@@ -176,13 +177,13 @@ function pagination(pageNumber) {
         $("#Page" + index).removeClass('active')
     }
     $("#Page" + pageNumber).toggleClass("active")
-    loadPage(pageNumber)
+    loadPage(pageNumber, tweetID_columnNumber, tweetURL_columnNumber)
 }
 
 $('#submit-btn').click(function () {
     myDataObject = {}
     deletChild('twitter-images')
-    deletChild('PainationButtons')
+    deletChild('PaginationButtons')
     question = $('#question-text').val()
     options = $('#answer-text').val().split(';')
     if (question.length && options.length != 0) {
@@ -207,9 +208,11 @@ $('#file-upload').change(function () {
         reader.addEventListener('load', function (e) {
             let text = e.target.result;
             csvAsArray = text.csvToArray();
+            tweetID_columnNumber = parseInt($('#tweetID_columnNumber-text').val())
+            tweetURL_columnNumber = parseInt($('#tweetURL_columnNumber-text').val())
             loadPageButtons()
-            arrayInitial()
-            loadPage(1)
+            arrayInitial(tweetID_columnNumber)
+            loadPage(1, tweetID_columnNumber, tweetURL_columnNumber)
             $("#Page1").toggleClass("active")
         });
         reader.addEventListener('error', function () {
