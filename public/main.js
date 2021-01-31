@@ -119,12 +119,24 @@ function drawImageBoxWithOptions(tweet_id, url) {
 }
 
 function checkImage(tweet_id, url) {
-    $.get(url)
+
+    const image = new Image();
+    image.src = url;
+
+    image.onload = function () {
+        drawImageBoxWithOptions(tweet_id, url)
+    }
+
+    image.onerror = function () {
+        myDataObject[tweet_id] = "Image Not Found"
+    }
+
+    /*$.get(url)
         .done(function () {
             drawImageBoxWithOptions(tweet_id, url)
         }).fail(function () {
             myDataObject[tweet_id] = "Image Not Found"
-        })
+        })*/
 }
 
 function arrayInitial(tweetID_columnNumber) {
