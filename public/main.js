@@ -201,6 +201,7 @@ $('#submit-btn').click(function () {
     if (question.length && options.length != 0) {
         $('#question-position').text(question)
         $('#exampleModal').modal('hide')
+        $('#loadModal').modal('hide')
     } else {
         alert('Either Question or Answer field is empty!')
     }
