@@ -73,7 +73,7 @@
                 <a
                   class="nav-link text-center"
                   data-toggle="modal"
-                  data-target="#exampleModal"
+                  data-target="#questionAnswerModal"
                   >New Question</a
                 >
               </li>
@@ -112,16 +112,16 @@
     <!-- Question and Answer Modal -->
     <div
       class="modal fade"
-      id="exampleModal"
+      id="questionAnswerModal"
       tabindex="-1"
       role="dialog"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="questionAnswerModalLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
+            <h5 class="modal-title" id="questionAnswerModalLabel">
               Question and possible answers
             </h5>
             <button
@@ -163,7 +163,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button id="submit-btn" type="submit" class="btn btn-primary">
+            <button id="submit-question-answer" type="submit" class="btn btn-primary">
               Submit
             </button>
             <button
@@ -225,10 +225,10 @@
           </div>
           <div class="modal-footer">
               <form>
-                <label for="file-upload" class="custom-file-upload">
+                <label for="load-csv" class="custom-file-upload">
                   <i class="fa fa-cloud-upload"></i>Load CSV</label>
                 <input
-                  id="file-upload"
+                  id="load-csv"
                   name="upload_csv_file"
                   type="file"
                   style="display: none"
@@ -271,7 +271,7 @@
             </button>
           </div>
           <div
-            id="modalButtons"
+            id="checkAllModalButtons"
             class="modal-footer d-flex justify-content-center text-center"
           ></div>
         </div>

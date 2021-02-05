@@ -1,6 +1,6 @@
 var options = ""
 var question = ""
-var myDataObject = {}
+var myDataObject = []
 let file
 let csvAsArray
 let splitStep = 100
@@ -92,85 +92,82 @@ function deletChild(id_element) {
     }
 }
 
-function handleClick(tweet_id, options_tag) {
+function handleClick(array_index, options_tag) {
     for (let index = 0; index < options.length; index++) {
-        $("#btn-" + tweet_id + "-" + options[index].replace(/\s+/g, "")).removeClass('active')
+        $("#btn-" + myDataObject[array_index].unique_id + "-" + options[index].replace(/\s+/g, "")).removeClass('active')
     }
-    $("#btn-" + tweet_id + "-" + options_tag.replace(/\s+/g, "")).toggleClass("active")
-    myDataObject[tweet_id] = options_tag
+    $("#btn-" + myDataObject[array_index].unique_id + "-" + options_tag.replace(/\s+/g, "")).toggleClass("active")
+    myDataObject[array_index].options_chosen = options_tag
 }
 
 function selectAllButtons(btnID) {
     let all_the_buttons = document.getElementsByClassName(`btn-Group-${btnID.replace(/\s+/g, "")}`)
     for (var i = 0, n = all_the_buttons.length; i < n; ++i) {
-        handleClick(all_the_buttons[i].id.split('-')[1], btnID)
+        handleClick(all_the_buttons[i].title, btnID)
     }
     $('#checkModal').modal('hide')
 }
 
-function drawImageBoxWithOptions(tweet_id, url) {
-    document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${tweet_id}" src="${url}" width="200" height="200" title="${tweet_id}"></td></tr><tr><td><div id="btn${tweet_id}"></div></td></tr></table></div></div>`
+function drawImageBoxWithOptions(array_index) {
+    document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${myDataObject[array_index].unique_id}" src="${myDataObject[array_index].url_secure}" width="200" height="200" title="${myDataObject[array_index].unique_id}"></td></tr><tr><td><div id="btn${myDataObject[array_index].unique_id}"></div></td></tr></table></div></div>`
     for (let index = 0; index < options.length; index++) {
-        document.getElementById(`btn${tweet_id}`).innerHTML += `<button type="button" id="btn-${tweet_id}-${options[index].replace(/\s+/g, "")}" onclick="handleClick('${tweet_id}', '${options[index]}')" class="btn-Group-${options[index].replace(/\s+/g, "")} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+        document.getElementById(`btn${myDataObject[array_index].unique_id}`).innerHTML += `<button type="button" id="btn-${myDataObject[array_index].unique_id}-${options[index].replace(/\s+/g, "")}" title="${array_index}" onclick="handleClick('${array_index}', '${options[index]}')" class="btn-Group-${options[index].replace(/\s+/g, "")} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
-    if (myDataObject[tweet_id] !== 'Did Not Load The Page' || 'Not Clicked' || 'Image Not Found') {
-        $("#btn-" + tweet_id + "-" + myDataObject[tweet_id].replace(/\s+/g, "")).toggleClass("active")
+    if (myDataObject[array_index].options_chosen !== 'Did Not Load The Page' || 'Not Clicked' || 'Image Not Found') {
+        $("#btn-" + myDataObject[array_index].unique_id + "-" + myDataObject[array_index].options_chosen.replace(/\s+/g, "")).toggleClass("active")
     }
 }
 
-function checkImage(tweet_id, url) {
-
+function checkImage(array_index) {
     const image = new Image();
-    image.src = url;
-
+    image.src = myDataObject[array_index].url_secure;
     image.onload = function () {
-        drawImageBoxWithOptions(tweet_id, url)
+        drawImageBoxWithOptions(array_index)
     }
-
     image.onerror = function () {
-        myDataObject[tweet_id] = "Image Not Found"
+        myDataObject[array_index].options_chosen = "Image Not Found"
     }
-
-    /*$.get(url)
-        .done(function () {
-            drawImageBoxWithOptions(tweet_id, url)
-        }).fail(function () {
-            myDataObject[tweet_id] = "Image Not Found"
-        })*/
 }
 
-function arrayInitial(tweetID_columnNumber) {
+function arrayInitial(tweetID_columnNumber, tweetURL_columnNumber) {
     csvAsArray.forEach(element => {
         if (element[tweetID_columnNumber-1] == "id") {
+            // skipping to the next element
             return
         } else {
-            myDataObject[element[tweetID_columnNumber-1]] = "Did Not Load The Page"
+            if (element[tweetURL_columnNumber-1].split(':')[0] == "http") {
+                myDataObject.push(
+                    {
+                        unique_id: element[tweetURL_columnNumber-1].split('/').pop().split('.')[0],
+                        tweet_id: element[tweetID_columnNumber-1],
+                        url_raw: element[tweetURL_columnNumber-1],
+                        url_secure: element[tweetURL_columnNumber-1].replace(':', 's:'),
+                        options_chosen: "Did Not Load The Page"
+                    }
+                )
+            } else {
+                myDataObject.push(
+                    {
+                        unique_id: element[tweetURL_columnNumber-1].split('/').pop().split('.')[0],
+                        tweet_id: element[tweetID_columnNumber-1],
+                        url_raw: element[tweetURL_columnNumber-1],
+                        url_secure: element[tweetURL_columnNumber-1],
+                        options_chosen: "Did Not Load The Page"
+                    }
+                )
+            }
         }
     });
 }
 
-function loadPage(pageNumber, tweetID_columnNumber, tweetURL_columnNumber) {
-    if (Math.ceil(csvAsArray.length / splitStep) == pageNumber) {
-        for (var j = splitStep * (pageNumber - 1) + 1; j < csvAsArray.length; j++) {
-            tweet_id = csvAsArray[j][tweetID_columnNumber-1];
-            url_raw = csvAsArray[j][tweetURL_columnNumber-1];
-            if (url_raw.split(':')[0] == "http") {
-                url = url_raw.replace(':', 's:')
-            } else {
-                url = url_raw
-            }
-            checkImage(tweet_id, url)
+function loadPage(pageNumber) {
+    if (Math.ceil(myDataObject.length / splitStep) == pageNumber) {
+        for (var array_index = splitStep * (pageNumber - 1) + 1; array_index < myDataObject.length; array_index++) {
+            checkImage(array_index)
         }
-    } else if (Math.ceil(csvAsArray.length / splitStep) > pageNumber) {
-        for (var j = splitStep * (pageNumber - 1) + 1; j < splitStep * pageNumber + 1; j++) {
-            tweet_id = csvAsArray[j][tweetID_columnNumber-1];
-            url_raw = csvAsArray[j][tweetURL_columnNumber-1];
-            if (url_raw.split(':')[0] == "http") {
-                url = url_raw.replace(':', 's:')
-            } else {
-                url = url_raw
-            }
-            checkImage(tweet_id, url)
+    } else if (Math.ceil(myDataObject.length / splitStep) > pageNumber) {
+        for (var array_index = splitStep * (pageNumber - 1) + 1; array_index < splitStep * pageNumber + 1; array_index++) {
+            checkImage(array_index)
         }
     }
 }
@@ -189,32 +186,31 @@ function pagination(pageNumber) {
         $("#Page" + index).removeClass('active')
     }
     $("#Page" + pageNumber).toggleClass("active")
-    loadPage(pageNumber, tweetID_columnNumber, tweetURL_columnNumber)
+    loadPage(pageNumber)
 }
 
-$('#submit-btn').click(function () {
-    myDataObject = {}
+$('#submit-question-answer').click(function () {
     deletChild('twitter-images')
     deletChild('PaginationButtons')
     question = $('#question-text').val()
     options = $('#answer-text').val().split(';')
     if (question.length && options.length != 0) {
         $('#question-position').text(question)
-        $('#exampleModal').modal('hide')
-        $('#loadModal').modal('hide')
+        $('#questionAnswerModal').modal('hide')
     } else {
         alert('Either Question or Answer field is empty!')
     }
-    deletChild('modalButtons')
+    deletChild('checkAllModalButtons')
     for (let index = 0; index < options.length; index++) {
-        document.getElementById(`modalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index].replace(/\s+/g, "")}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
+        document.getElementById(`checkAllModalButtons`).innerHTML += `<button type="button" id="selectAllBtn${options[index].replace(/\s+/g, "")}" onclick="selectAllButtons('${options[index]}')" class="shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
     }
 })
 
-$('#file-upload').change(function () {
+$('#load-csv').change(function () {
+    $('#loadModal').modal('hide')
     deletChild('twitter-images')
     let i = $(this).prev('label').clone();
-    file = $('#file-upload')[0].files[0];
+    file = $('#load-csv')[0].files[0];
     $(this).prev('label').text(file.name);
     if (file) {
         let reader = new FileReader();
@@ -224,8 +220,8 @@ $('#file-upload').change(function () {
             tweetID_columnNumber = parseInt($('#tweetID_columnNumber-text').val())
             tweetURL_columnNumber = parseInt($('#tweetURL_columnNumber-text').val())
             loadPageButtons()
-            arrayInitial(tweetID_columnNumber)
-            loadPage(1, tweetID_columnNumber, tweetURL_columnNumber)
+            arrayInitial(tweetID_columnNumber, tweetURL_columnNumber)
+            loadPage(1)
             $("#Page1").toggleClass("active")
         });
         reader.addEventListener('error', function () {
@@ -236,10 +232,10 @@ $('#file-upload').change(function () {
 });
 
 function submit_all() {
-    var csv = 'tweet_id,options_chosen\n';
-    for (const [key, value] of Object.entries(myDataObject)) {
-        csv += `${key}` + ',' + `${value}` + '\n';
-    }
+    var csv = 'Tweet ID,Media URL,Option Chosen\n';
+    myDataObject.forEach(element => {
+        csv += `${element.tweet_id}` + ',' + `${element.url_raw}` + ',' + `${element.options_chosen}` + '\n';
+    });
     var filename = sanitize(question) + ' - ' + file.name;
     if (!csv.match(/^data:text\/csv/i)) {
         csv = 'data:text/csv;charset=utf-8,' + csv;
@@ -252,3 +248,9 @@ function submit_all() {
     link.click();
     document.body.removeChild(link);
 }
+
+
+// Return a value from an object
+// let result = myObject.find(obj => {
+//     return obj.uid === "x02"
+//   })
