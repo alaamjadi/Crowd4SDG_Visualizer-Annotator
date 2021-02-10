@@ -39,6 +39,9 @@ li.nav-item {
   color: white !important;
   font-weight: bold;
 }
+.fs-7 {
+  font-size: 14px;
+}
 
 /****** Footer ******/
 footer {
