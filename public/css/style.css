@@ -64,7 +64,6 @@ body {
   margin: 0;
   font-family: courier;
   font-size: large;
-  user-select: none;
 }
 .borderless td, .borderless th {
   border: none;
