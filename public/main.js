@@ -1,10 +1,10 @@
 var options = ""
 var question = ""
 var myDataObject = []
-let file
-let csvAsArray
-let splitStep = 100
-let tweetID_columnNumber, tweetURL_columnNumber
+var file
+var csvAsArray
+var splitStep = 100
+var tweetID_columnNumber, tweetURL_columnNumber
 
 function sanitize(input) {
     var illegalRe = /[\/\?<>\\:\*\|":]/g;
@@ -109,7 +109,7 @@ function selectAllButtons(btnID) {
 }
 
 function drawImageBoxWithOptions(array_index) {
-    document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${myDataObject[array_index].unique_id}" src="${myDataObject[array_index].url_secure}" width="200" height="200" title="${myDataObject[array_index].unique_id}"></td></tr><tr><td><div class="fs-7">${myDataObject[array_index].tweet_id}</div></td></tr><tr><td><div id="btn${myDataObject[array_index].unique_id}"></div></td></tr></table></div></div>`
+    document.getElementById('twitter-images').innerHTML += `<div class="d-flex justify-content-center col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center"><div class="table-responsive"><table class="table borderless"><tr><td><img alt="Twitter Image with ID ${myDataObject[array_index].unique_id}" src="${myDataObject[array_index].url_secure}" width="200" height="200" title="${myDataObject[array_index].unique_id}"></td></tr><tr><td><p class="fs-7">${myDataObject[array_index].tweet_id}</p></td></tr><tr><td><div id="btn${myDataObject[array_index].unique_id}"></div></td></tr></table></div></div>`
     
     for (let index = 0; index < options.length; index++) {
         document.getElementById(`btn${myDataObject[array_index].unique_id}`).innerHTML += `<button type="button" id="btn-${myDataObject[array_index].unique_id}-${options[index].replace(/\s+/g, "")}" title="${array_index}" onclick="handleClick('${array_index}', '${options[index]}')" class="btn-Group-${options[index].replace(/\s+/g, "")} shadow rounded-lg button center mr-2 mb-2">${options[index]}</button>`
