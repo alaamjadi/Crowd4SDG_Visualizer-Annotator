@@ -1,16 +1,16 @@
-# Social Distancing Project
-A project for Crowd4SDG project which was developed by SK at Politecnico di Milano
+# Visualizer Annotator Project
+A subproject of Crowd4SDG project which was developed by Mohammad Ala Amjadi at Politecnico di Milano
 
 ## Instructions
 
-### Installing, Running, and using
+### Installing, Running and using
 
-You can whether use this application locally or on the cloud.
+You can whether use this application locally or on the cloud (Heroku).
 
 #### Installing the server
 
-You need a local HTTP server to serve the public folder (index.hml). This can be done using Node, Python, XAMP, WAMP, and any other server.
-- Node: [Download](https://nodejs.org/en/download/), for MacOS instructions [click here](https://treehouse.github.io/installation-guides/mac/node-mac.html)
+You need a local HTTP server to serve the public folder (index.hml). This can be done using Node, Python, XAMP, WAMP, or any other server.
+- Node: [Download](https://nodejs.org/en/download/), for macOS instructions [click here](https://treehouse.github.io/installation-guides/mac/node-mac.html)
 
     Run the following command inside the application folder where index.js exists:
     ```

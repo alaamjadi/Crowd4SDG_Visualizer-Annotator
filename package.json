@@ -1,7 +1,7 @@
 {
-    "name": "social-distancing",
+    "name": "visualizer-annotator",
     "version": "1.0.0",
-    "description": "Social Distancing Project at Politecnico di Milano",
+    "description": "Visualizer Annotator Project at Politecnico di Milano",
     "main": "index.js",
     "scripts": {
         "prestart": "npm install",
@@ -15,7 +15,7 @@
         "JQuery",
         "NPM"
     ],
-    "author": "SophisticatedKids",
+    "author": "Mohammad Ala Amjadi",
     "license": "MIT",
     "private": true,
     "dependencies": {
