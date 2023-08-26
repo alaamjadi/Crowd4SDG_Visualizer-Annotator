@@ -5,7 +5,7 @@ A subproject of Crowd4SDG project which was developed by Mohammad Ala Amjadi at 
 
 ### Installing, Running and using
 
-You can whether use this application locally or on the cloud (Heroku).
+You can whether use this application locally or on the cloud (Render Cloud).
 
 #### Installing the server
 
@@ -20,7 +20,7 @@ You need a local HTTP server to serve the public folder (index.hml). This can be
 
 #### Running the application
 
-Running the application on Heroku Cloud: [Click here](https://social-distancing-project.herokuapp.com/)
+Running the application on Render Cloud: [Click here](https://crowd4sdg-visualizer-annotator.onrender.com/)
 
 Running the application locally:
 
