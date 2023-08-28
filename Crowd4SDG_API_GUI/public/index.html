@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<!-- <head> -->
+<!-- |||||| -->
+<!-- VVVVVV -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Corwd4SDG API" />
+  <meta name="keywords" content="API, Image Classification, Twitter, CrowdSource, Image Filteration" />
+  <meta name="author" content="SK" />
+
+  <title>API</title>
+
+  <!-- *** favicon *** -->
+  <link rel="shortcut icon" href="./assets/img/favicon.ico" />
+
+  <!-- *** Bootstrap CSS *** -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+    integrity="sha512-Ez0cGzNzHR1tYAv56860NLspgUGuQw16GiOOp/I2LuTmpSK9xDXlgJz3XN4cnpXWDmkNBKXR/VDMTCnAaEooxA=="
+    crossorigin="anonymous">
+
+  <!-- *** Optional CSS *** -->
+  <link rel="stylesheet" href="./assets/css/style.css" type="text/css" />
+
+</head>
+
+
+<!-- ****** -->
+<!-- <body> -->
+<!-- V****V -->
+
+<body>
+  <header class="pb-2"></header>
+
+  <div class="container pt-2">
+
+    <!-- *** GET/POST Method *** -->
+    <div class="row allways">
+      <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <p>How to receive the CSV file:</p>
+        <select class="form-select" aria-label="GET POST method selection">
+          <option value="removeAll" selected>Choose a method</option>
+          <option value="methodGET">URL (GET request)</option>
+          <option value="methodPOST">Upload (POST request)</option>
+        </select>
+      </div>
+    </div>
+
+    <br />
+
+    <!-- *** FILE *** -->
+    <div class="row d-none" id="csvFileSection">
+      <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <p>Choose the CSV file:</p>
+        <form>
+          <label for="load-csv" class="custom-file-upload"><i class="fa fa-cloud-upload"></i>Load CSV</label>
+          <input id="load-csv" class="urls" name="upload_csv_file" type="file" style="display: none" />
+        </form>
+      </div>
+    </div>
+
+    <!-- *** LINK *** -->
+    <div class="row d-none" id="csvLinkSection">
+      <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-5">
+        <p>Enter the URL:</p>
+        <div class="input-group">
+          <input type="text" class="form-control urls" id="urls" value="https://drive.google.com/"
+            placeholder="https://drive.google.com/" aria-label="CSV URL" onfocus="this.value='';">
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <!-- *** Choose column name *** -->
+    <div class="row d-none" id="columnNameListParent">
+      <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <p>Choose the column name:</p>
+        <select class="form-select columns" aria-label="Column name selection" id="columnNameList">
+          <!-- The JS will add the column names as options -->
+        </select>
+      </div>
+    </div>
+
+    <!-- *** Enter the column name *** -->
+    <div class="row d-none" id="columnNameboxParent">
+      <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <p>Enter the column name:</p>
+        <div class="input-group">
+          <input type="text" class="form-control columns" id="columns" value="media_url" placeholder="media_url"
+            aria-label="column name media url" onfocus="this.value='';">
+        </div>
+      </div>
+    </div>
+
+    </br>
+
+    <!-- *** Filters *** -->
+    <div class="row d-none" id="filterSelection">
+      <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-8">
+        <p>Choose the filters and define their confidence:</p>
+
+        <!-- *** Filter1 *** -->
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <select class="form-select" id="filter1" aria-label="Filter selection">
+              <option disabled selected value="none">Choose a filter</option>
+              <option value="PeopleDetector">People Detector</option>
+              <option value="MemeDetector">Meme Detector</option>
+              <option value="PublicPrivateClassifier">Public-Private Classifier</option>
+            </select>
+          </div>
+          <input type="text" class="form-control" id="threshold1" aria-label="Text input with dropdown button"
+            onfocus="this.value='';">
+        </div>
+
+        <br />
+
+        <!-- *** Filter2 *** -->
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <select class="form-select" id="filter2" aria-label="Filter selection">
+              <option disabled selected value="none">Choose a filter</option>
+              <option value="PeopleDetector">People Detector</option>
+              <option value="MemeDetector">Meme Detector</option>
+              <option value="PublicPrivateClassifier">Public-Private Classifier</option>
+            </select>
+          </div>
+          <input type="text" class="form-control" id="threshold2" aria-label="Text input with dropdown button"
+            onfocus="this.value='';">
+        </div>
+
+        <br />
+
+        <!-- *** Filter3 *** -->
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <select class="form-select" id="filter3" aria-label="Filter selection">
+              <option disabled selected value="none">Choose a filter</option>
+              <option value="PeopleDetector">People Detector</option>
+              <option value="MemeDetector">Meme Detector</option>
+              <option value="PublicPrivateClassifier">Public-Private Classifier</option>
+            </select>
+          </div>
+          <input type="text" class="form-control" id="threshold3" aria-label="Text input with dropdown button"
+            onfocus="this.value='';">
+        </div>
+
+      </div>
+    </div>
+
+    <br />
+    </br>
+
+    <div class="row d-none" id="submitSection">
+      <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- *** jQuery first, then Popper.js, then Bootstrap JS *** -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
+    integrity="sha512-EKWWs1ZcA2ZY9lbLISPz8aGR2+L7JVYqBAYTq5AXgBkSjRSuQEGqWx8R1zAX16KdXPaCjOCaKE8MCpU0wcHlHA=="
+    crossorigin="anonymous"></script>
+
+  <!-- *** Optional JavaScript *** -->
+  <script src="./assets/js/main.js"></script>
+
+</body>
+
+</html>

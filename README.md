@@ -1,6 +1,10 @@
 # Visualizer Annotator Project
 A subproject of Crowd4SDG project which was developed by Mohammad Ala Amjadi at Politecnico di Milano
 
+## Changes
+
+- 2023-08-28: Transfered "Crowd4SDG_API_GUI" repo into a folder with the same name.
+
 ## Instructions
 
 ### Installing, Running and using
